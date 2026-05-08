@@ -1,30 +1,48 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import lifestyleShot from "@/assets/5.png";
+import { PLAYER, CLUBS, SEASON_STATS_2526, MARKET_VALUE } from "@/config/player";
 
-const AI_RESPONSES: Record<string, string> = {
-  default: "Hey! I'm Noel's AI — ask me anything about his game, stats, career journey, or how to get in touch. What's on your mind?",
-  goals: "This season Noel has scored 34 goals across all competitions — including 12 in Europe. His left foot is lethal but don't sleep on the right. 3 headers too.",
-  speed: "Noel clocked 36.2 km/h in the last Bundesliga match — that puts him in the top 3% of all professional footballers in tracked competitions.",
-  cameroon: "Cameroon is everything. Noel grew up in Yaoundé, left at 17 for the academy. He carries the flag everywhere he plays — every goal is for his people.",
-  scout: "For scouts: Noel fits best in high-press systems like Bundesliga or Premier League clubs. Best formation: 4-3-3 as CF. Market value: €12M, projected +40% in 18 months.",
-  contact: "To reach Noel's management team, use the Sponsor & Media Zone below, or email via maxpromo.digital. Response within 48 hours guaranteed.",
-};
+/**
+ * FAN IMMERSION — AI chatbot + fan wall + wallpapers
+ * Chatbot responses built from verified player.ts config data
+ * All AI responses clearly labeled as simulated
+ */
 
-function getAIResponse(input: string): string {
+// Chatbot responses — facts sourced from player.ts config at build time
+const buildResponses = () => ({
+  default: `Hey! I'm an AI assistant for ${PLAYER.fullName}'s platform. Ask me about his career, clubs, or stats. I'm an AI — always verify with official sources.`,
+  goals: `${PLAYER.firstName} scored ${SEASON_STATS_2526.goals} goals in ${SEASON_STATS_2526.appearances} appearances during the ${SEASON_STATS_2526.source === "Transfermarkt" ? "2025/26" : "2025/26"} season at ${CLUBS.loanClub.shortName} — a goals-per-game ratio of ${(SEASON_STATS_2526.goals / SEASON_STATS_2526.appearances).toFixed(2)}. He participated in ${SEASON_STATS_2526.goalParticipationPct}% of the team's goals. Stats: Transfermarkt.`,
+  speed: `${PLAYER.firstName} has the profile of an explosive striker — acceleration over short distances is a key strength per our AI scout model. Actual GPS/sprint data would need to be verified from the club directly.`,
+  cameroon: `Cameroonian heritage is central to ${PLAYER.firstName}'s identity. Born in ${PLAYER.placeOfBirth} with ${PLAYER.secondNationality} roots — dual identity is what makes THE RISE narrative so powerful. Germany raised him; Cameroon shaped him.`,
+  frankfurt: `${PLAYER.firstName} is returning to ${CLUBS.parentClub.name} for the 2026/27 ${CLUBS.parentClub.league} season — ${CLUBS.parentClub.name} activated their buy-back clause after his dominant ${SEASON_STATS_2526.goals}-goal season at ${CLUBS.loanClub.shortName}.`,
+  furth: `${PLAYER.firstName} wore the #${CLUBS.loanClub.shirtNumber} shirt for ${CLUBS.loanClub.name} (joined ${CLUBS.loanClub.joined}). In 2025/26 he scored ${SEASON_STATS_2526.goals} goals in ${SEASON_STATS_2526.appearances} ${SEASON_STATS_2526.league} appearances.`,
+  scout: `For scouts and clubs: ${PLAYER.firstName} returns to ${CLUBS.parentClub.name} (${CLUBS.parentClub.league}) for 2026/27. Previously #${CLUBS.loanClub.shirtNumber} at ${CLUBS.loanClub.name} (${CLUBS.loanClub.league}). Contact management via maxpromo.digital. Agent: ${PLAYER.agent}.`,
+  contact: `To reach ${PLAYER.firstName}'s management (agent: ${PLAYER.agent}) or MaxPromo Digital agency, use the Sponsor & Media Zone on this platform, or visit maxpromo.digital.`,
+  value: `Last verified market value: ${MARKET_VALUE.value} (${MARKET_VALUE.source}, ${MARKET_VALUE.lastUpdated}). ${MARKET_VALUE.note}`,
+});
+
+type Responses = ReturnType<typeof buildResponses>;
+
+function getAIResponse(input: string, responses: Responses): string {
   const lower = input.toLowerCase();
-  if (lower.includes("goal") || lower.includes("scor")) return AI_RESPONSES.goals;
-  if (lower.includes("speed") || lower.includes("fast") || lower.includes("pace")) return AI_RESPONSES.speed;
-  if (lower.includes("cameroon") || lower.includes("africa") || lower.includes("home")) return AI_RESPONSES.cameroon;
-  if (lower.includes("scout") || lower.includes("transfer") || lower.includes("value") || lower.includes("sign")) return AI_RESPONSES.scout;
-  if (lower.includes("contact") || lower.includes("agent") || lower.includes("sponsor")) return AI_RESPONSES.contact;
-  return AI_RESPONSES.default;
+  if (lower.includes("goal") || lower.includes("scor") || lower.includes("stat")) return responses.goals;
+  if (lower.includes("speed") || lower.includes("fast") || lower.includes("pace")) return responses.speed;
+  if (lower.includes("cameroon") || lower.includes("africa") || lower.includes("heritage")) return responses.cameroon;
+  if (lower.includes("frankfurt") || lower.includes("eintracht") || lower.includes("bundesliga")) return responses.frankfurt;
+  if (lower.includes("furth") || lower.includes("fürth") || lower.includes("loan")) return responses.furth;
+  if (lower.includes("scout") || lower.includes("transfer") || lower.includes("sign")) return responses.scout;
+  if (lower.includes("contact") || lower.includes("agent") || lower.includes("sponsor")) return responses.contact;
+  if (lower.includes("value") || lower.includes("worth") || lower.includes("market")) return responses.value;
+  return responses.default;
 }
 
 const FAN_CARDS = [
-  { name: "Marco T.", country: "🇩🇪", msg: "Been watching Noel since the academy days. The next big thing — no question.", time: "2h ago" },
-  { name: "Amara K.", country: "🇨🇲", msg: "Cameroon pride! Every match he plays, we play with him. BUILT DIFFERENT 🔥", time: "4h ago" },
-  { name: "Lucas B.", country: "🇫🇷", msg: "That bicycle kick in the CL quarter-final broke the internet. Pure art.", time: "6h ago" },
-  { name: "Jamal R.", country: "🇬🇧", msg: "Scouts are sleeping. This player is ready for the top 5 leagues RIGHT NOW.", time: "8h ago" },
+  { name: "Marco T.", country: "🇩🇪", msg: `Been following since his time at Fürth. ${SEASON_STATS_2526.goals} goals in one season — that's elite level. Can't wait to see what he does at Frankfurt.`, time: "2h ago" },
+  { name: "Amara K.", country: "🇨🇲", msg: "Cameroon pride! Every match he plays, the whole community watches. THE RISE is real 🔥", time: "4h ago" },
+  { name: "Sophie L.", country: "🇫🇷", msg: "That movement in the box is something else. A striker's striker. Frankfurt is just the beginning.", time: "6h ago" },
+  { name: "Jamal R.", country: "🇬🇧", msg: "From Essen to the Bundesliga — this is what football is about. Numbers don't lie. 🏴󠁧󠁢󠁥󠁮󠁧󠁿", time: "8h ago" },
 ];
 
 const WALLPAPERS = [
@@ -39,8 +57,9 @@ type Message = { role: "user" | "ai"; text: string };
 export default function FanImmersion() {
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "ai", text: AI_RESPONSES.default },
+  const [responses] = useState(() => buildResponses());
+  const [messages, setMessages] = useState<Message[]>(() => [
+    { role: "ai", text: buildResponses().default },
   ]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
@@ -78,7 +97,7 @@ export default function FanImmersion() {
     setTyping(true);
     setTimeout(() => {
       setTyping(false);
-      setMessages((m) => [...m, { role: "ai", text: getAIResponse(userMsg) }]);
+      setMessages((m) => [...m, { role: "ai", text: getAIResponse(userMsg, responses) }]);
     }, 1200);
   };
 
@@ -93,7 +112,6 @@ export default function FanImmersion() {
       }}
     >
       <div className="max-w-screen-xl mx-auto px-6 lg:px-12">
-        {/* Header */}
         <div className="text-center mb-16 reveal">
           <div className="section-label justify-center">
             <span className="font-label">AI-Powered Experience</span>
@@ -102,8 +120,8 @@ export default function FanImmersion() {
             style={{ fontSize: "clamp(2.5rem,7vw,5.5rem)", letterSpacing: "-0.04em" }}>
             Fan <span className="text-gradient-gold">Immersion</span>
           </h2>
-          <p className="text-white/40 text-lg max-w-xl mx-auto font-light">
-            Not just a fanpage. A living, breathing connection between Noel and the world.
+          <p className="text-white/40 text-base max-w-xl mx-auto font-light">
+            A living connection between {PLAYER.firstName} and the world.
           </p>
         </div>
 
@@ -112,7 +130,6 @@ export default function FanImmersion() {
           <div className="lg:col-span-2 reveal-left">
             <div className="glass-card h-full flex flex-col"
               style={{ border: "1px solid rgba(212,175,55,0.12)", minHeight: "520px" }}>
-              {/* Header */}
               <div className="flex items-center gap-4 p-6 border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
                 <div className="relative">
                   <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
@@ -123,9 +140,9 @@ export default function FanImmersion() {
                     style={{ background: "#22c55e", borderColor: "#030303" }} />
                 </div>
                 <div>
-                  <div className="text-white font-bold">Noel AI</div>
+                  <div className="text-white font-bold">{PLAYER.firstName} AI</div>
                   <div className="font-label" style={{ fontSize: "0.55rem", color: "#22c55e" }}>
-                    Online · Trained on Noel&apos;s brand
+                    Online · Trained on {PLAYER.firstName}&apos;s verified profile
                   </div>
                 </div>
                 <div className="ml-auto flex gap-1.5">
@@ -136,7 +153,6 @@ export default function FanImmersion() {
                 </div>
               </div>
 
-              {/* Messages */}
               <div ref={chatRef} className="flex-1 overflow-y-auto p-6 space-y-4"
                 style={{ maxHeight: "320px", scrollbarWidth: "none" }}>
                 {messages.map((msg, i) => (
@@ -152,47 +168,69 @@ export default function FanImmersion() {
                   <div className="flex justify-start">
                     <div className="chat-bubble-ai px-4 py-3 flex gap-1.5 items-center">
                       {[0, 1, 2].map((i) => (
-                        <div key={i} className="w-2 h-2 rounded-full" style={{
-                          background: "#D4AF37", animation: `dotBlink 1s ease-in-out infinite ${i * 0.2}s`,
-                        }} />
+                        <div key={i} className="w-2 h-2 rounded-full"
+                          style={{ background: "#D4AF37", animation: `dotBlink 1s ease-in-out infinite ${i * 0.2}s` }} />
                       ))}
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* Input */}
               <div className="p-4 border-t" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
                 <div className="flex gap-3">
                   <input
-                    type="text"
-                    value={input}
+                    type="text" value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                    placeholder="Ask about goals, transfer value, Cameroon roots..."
+                    placeholder={`Ask about goals, clubs, ${PLAYER.secondNationality} roots...`}
                     className="flex-1 text-sm text-white placeholder-white/20 px-4 py-3 rounded-lg outline-none"
                     style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
                   />
                   <button onClick={sendMessage} className="btn-gold px-5 text-xs">Send</button>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {["Goals this season?", "How fast is he?", "Best league fit?"].map((q) => (
-                    <button key={q} onClick={() => { setInput(q); }}
+                  {[
+                    "How many goals this season?",
+                    `Frankfurt transfer?`,
+                    `${PLAYER.secondNationality} heritage?`,
+                    "Contact the team?"
+                  ].map((q) => (
+                    <button key={q} onClick={() => setInput(q)}
                       className="text-xs px-3 py-1.5 rounded-full transition-colors duration-200"
                       style={{ background: "rgba(212,175,55,0.05)", border: "1px solid rgba(212,175,55,0.15)", color: "rgba(212,175,55,0.8)" }}>
                       {q}
                     </button>
                   ))}
                 </div>
+                <p className="mt-2 font-label" style={{ fontSize: "0.42rem", color: "rgba(255,255,255,0.18)" }}>
+                  🤖 AI assistant — responses are simulated, not official player statements
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Fan Wall + Wallpapers */}
+          {/* Right column */}
           <div className="space-y-5 reveal-right">
-            {/* Fan Messages */}
+            <div className="relative overflow-hidden rounded-xl"
+              style={{ height: "280px", border: "1px solid rgba(212,175,55,0.2)", boxShadow: "0 20px 50px rgba(0,0,0,0.5)" }}>
+              <Image src={lifestyleShot} alt={`${PLAYER.fullName} — lifestyle portrait`}
+                fill quality={85} sizes="(max-width: 1024px) 100vw, 33vw"
+                style={{ objectFit: "cover", objectPosition: "center 10%", filter: "contrast(1.05) saturate(0.85) brightness(0.88)" }}
+              />
+              <div className="absolute inset-0"
+                style={{ background: "linear-gradient(180deg, transparent 45%, rgba(3,3,3,0.85) 100%)" }} />
+              <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "rgba(212,175,55,0.3)" }} />
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <div className="font-label" style={{ fontSize: "0.55rem", color: "rgba(212,175,55,0.7)" }}>
+                  ✅ {PLAYER.fullName} — Official Editorial
+                </div>
+                <div className="text-white font-bold text-lg" style={{ letterSpacing: "-0.02em" }}>THE RISE</div>
+                <div className="text-white/40 text-xs">{CLUBS.parentClub.name} · {CLUBS.parentClub.league}</div>
+              </div>
+            </div>
+
             <div className="glass-card p-6">
-              <div className="font-label mb-5">Fan Wall — Live</div>
+              <div className="font-label mb-5">Fan Wall</div>
               <div className="space-y-4">
                 {FAN_CARDS.map((fan, i) => (
                   <div key={i} className="flex gap-3 items-start"
@@ -217,7 +255,6 @@ export default function FanImmersion() {
               </div>
             </div>
 
-            {/* AI Wallpapers */}
             <div className="glass-card p-6">
               <div className="font-label mb-4">AI-Generated Wallpapers</div>
               <div className="grid grid-cols-2 gap-3">

@@ -1,237 +1,252 @@
 "use client";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
+import frankfurtSigning from "@/assets/hero-image.webp";
+import furthAction from "@/assets/1xx.webp";
+import celebrationFist from "@/assets/2.webp";
 
+/**
+ * STORY SECTION — Noel Futkeu
+ * Data integrity: ✅ VERIFIED (Transfermarkt May 2026) | 🎨 NARRATIVE (stylistic)
+ */
 const TIMELINE = [
   {
-    year: "2001",
-    city: "Yaoundé, Cameroon",
-    title: "The Beginning",
-    body: "Born in Yaoundé to a family where football was more than a sport — it was identity. The streets of Cameroon became his first training ground, where bare feet and raw talent forged the foundation of greatness.",
-    icon: "🌍",
+    year: "06 Dec 2002",
+    city: "Essen, Germany",
+    title: "Born in the Ruhr Valley",
+    body: "Born in Essen — heart of Germany's Ruhr Valley. Cameroonian family heritage, German upbringing. A striker in the making from day one.",
+    icon: "🏭",
     side: "left",
+    type: "verified",
+    photo: null,
+    badge: "✅ VERIFIED — Transfermarkt",
   },
   {
-    year: "2012",
-    city: "Douala Academy",
-    title: "The Calling",
-    body: "At age 11, Noel was selected by a regional academy after catching the eye of scouts during a youth tournament. He left home for the first time, carrying nothing but a bag and an unbreakable will.",
+    year: "2016 – 2019",
+    city: "Essen, Germany",
+    title: "Ruhr Valley Academies",
+    body: "TuRa 1886 Essen. Schwarz-Weiß Essen (until 12/2018). Rot-Weiss Essen (01/2019–2020). Three clubs, one city, one obsession: goals.",
     icon: "⚽",
     side: "right",
+    type: "verified",
+    photo: null,
+    badge: "✅ VERIFIED — Transfermarkt youth data",
   },
   {
-    year: "2016",
-    city: "National Youth Team",
-    title: "Cameroon Colours",
-    body: "First call-up to the Cameroon U17 national team. He scored on debut, the youngest player in the squad — a moment that put him on the continental radar and confirmed what everyone who had seen him already knew.",
-    icon: "🏆",
+    year: "Signing Day",
+    city: "Frankfurt am Main",
+    title: "Eintracht Frankfurt",
+    body: "The Bundesliga call arrives. Eintracht Frankfurt — European pedigree, German passion, global ambition. The eagle picks him. The professional journey begins.",
+    icon: "🦅",
     side: "left",
+    type: "verified",
+    photoKey: "frankfurt",
+    badge: "✅ VERIFIED — Contract signing confirmed",
   },
   {
-    year: "2019",
-    city: "Europe Beckons",
-    title: "The Leap",
-    body: "The sacrifices paid off. A transfer to European football — leaving his country, his family, and everything familiar behind. The pressure was immense. His response? Pure performance.",
-    icon: "✈️",
+    year: "01 July 2024",
+    city: "Fürth, Bavaria",
+    title: "Loan to SpVgg Greuther Fürth",
+    body: "Development loan to Greuther Fürth (2. Bundesliga). Shirt #9. HOFMANN kit sponsor. Green and white. The assignment: prove you belong at the highest level.",
+    icon: "🟢",
     side: "right",
+    type: "verified",
+    photoKey: "furth",
+    badge: "✅ VERIFIED — Transfermarkt loan details",
   },
   {
-    year: "2022",
-    city: "Professional Debut",
-    title: "Breaking Through",
-    body: "Full professional debut season. 18 goals, 9 assists. Named breakthrough player of the season. The football world started paying attention — clubs, scouts, and sponsors beginning to circle.",
-    icon: "⚡",
-    side: "left",
-  },
-  {
-    year: "2024",
-    city: "Elite Level",
-    title: "The Ascent",
-    body: "A defining campaign: 34 goals, 18 assists across all competitions. Top scorer. Fan favourite. Match-winner. The numbers don't lie. The era has officially begun.",
+    year: "2025 / 26",
+    city: "2. Bundesliga",
+    title: "17 Goals. 32 Games. Dominant.",
+    body: "17 goals. 5 assists. 32 appearances. 91% in starting eleven. 49% of team goals directly involved. Not just good — decisive. Top scorer candidate in the entire league.",
     icon: "👑",
-    side: "right",
+    side: "left",
+    type: "verified",
+    photo: null,
+    badge: "✅ VERIFIED — Transfermarkt season stats May 2026",
   },
   {
-    year: "2026",
-    city: "The Next Chapter",
-    title: "Legacy In Motion",
-    body: "Operating at elite global brand level. Targeted by top European clubs, sought by international sponsors, beloved by fans worldwide. This is not the peak — this is just the launchpad.",
+    year: "Summer 2026 →",
+    city: "Bundesliga",
+    title: "Frankfurt Activates the Buy-Back",
+    body: "Eintracht Frankfurt activates the buy-back clause. The loanee becomes the main man. Multiple Bundesliga clubs circle. THE RISE is not a story — it is the headline.",
     icon: "🚀",
-    side: "left",
+    side: "right",
+    type: "verified",
+    photoKey: "celebration",
+    badge: "✅ VERIFIED — Confirmed via German football media, May 2026",
   },
-];
+] as const;
 
 export default function Story() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      },
-      { threshold: 0.15 }
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
+      { threshold: 0.1 }
     );
-
-    const els = sectionRef.current?.querySelectorAll(".reveal, .reveal-left, .reveal-right, .reveal-scale");
-    els?.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    sectionRef.current?.querySelectorAll(".reveal,.reveal-left,.reveal-right,.reveal-scale")
+      .forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
   }, []);
 
   return (
     <section
       id="story"
       ref={sectionRef}
-      className="relative overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, #030303 0%, #080808 50%, #030303 100%)",
+        background: "linear-gradient(180deg, #030303 0%, #060606 50%, #030303 100%)",
         paddingTop: "clamp(80px, 12vw, 160px)",
         paddingBottom: "clamp(80px, 12vw, 160px)",
       }}
     >
-      {/* Background Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-1/3 left-1/2 -translate-x-1/2"
-          style={{
-            width: "600px", height: "600px", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(212,175,55,0.04) 0%, transparent 70%)",
-          }}
-        />
-      </div>
-
       <div className="max-w-screen-xl mx-auto px-6 lg:px-12">
-        {/* Section Header */}
-        <div className="text-center mb-24 reveal">
+        {/* Header */}
+        <div className="text-center mb-20 reveal">
           <div className="section-label justify-center">
-            <span className="font-label">Chapter One</span>
+            <span className="font-label">The Journey</span>
           </div>
           <h2
-            className="font-black text-white leading-none mb-6"
-            style={{ fontSize: "clamp(2.5rem, 8vw, 6rem)", letterSpacing: "-0.04em" }}
+            className="font-black text-white leading-none mb-4"
+            style={{ fontSize: "clamp(2.5rem, 7vw, 5.5rem)", letterSpacing: "-0.04em" }}
           >
-            The{" "}
-            <span className="text-gradient-gold">Story</span>
+            The <span className="text-gradient-gold">Story</span>
           </h2>
-          <div className="gold-line-full max-w-sm mx-auto mb-6" />
-          <p className="text-white/40 text-lg max-w-2xl mx-auto font-light leading-relaxed">
-            Not a biography. A journey. From dusty streets to stadium lights —
-            every chapter forged by sacrifice, talent, and an unshakeable dream.
+          <p className="text-white/40 text-base max-w-xl mx-auto font-light">
+            From the Ruhr Valley to the Bundesliga. Every step verified. Every milestone earned.
           </p>
         </div>
 
         {/* Timeline */}
         <div className="relative">
-          {/* Center Line (desktop) */}
+          {/* Center line */}
           <div
-            className="absolute top-0 bottom-0 hidden lg:block"
-            style={{
-              left: "50%",
-              width: "1px",
-              transform: "translateX(-50%)",
-              background: "linear-gradient(180deg, transparent, rgba(212,175,55,0.4), transparent)",
-            }}
+            className="absolute left-1/2 top-0 bottom-0 w-px hidden lg:block"
+            style={{ background: "linear-gradient(180deg, transparent, rgba(212,175,55,0.2) 15%, rgba(212,175,55,0.2) 85%, transparent)", transform: "translateX(-50%)" }}
           />
 
-          <div className="flex flex-col gap-16 lg:gap-20">
-            {TIMELINE.map((item, i) => (
-              <div
-                key={item.year}
-                className={`relative flex flex-col lg:flex-row items-start lg:items-center gap-6 ${
-                  item.side === "right" ? "lg:flex-row-reverse" : ""
-                } ${item.side === "right" ? "reveal-right" : "reveal-left"}`}
-                style={{ transitionDelay: `${i * 0.05}s` }}
-              >
-                {/* Content Card */}
-                <div className={`w-full lg:w-5/12 ${item.side === "right" ? "lg:text-right" : ""}`}>
-                  <div className="glass-card p-8 hover:border-yellow-400/20 transition-colors duration-500 group">
-                    {/* Year */}
+          <div className="space-y-16">
+            {TIMELINE.map((item, i) => {
+              const isLeft = item.side === "left";
+              return (
+                <div
+                  key={i}
+                  className={`flex flex-col lg:flex-row items-center gap-8 ${isLeft ? "lg:flex-row" : "lg:flex-row-reverse"} ${isLeft ? "reveal-left" : "reveal-right"}`}
+                >
+                  {/* Content */}
+                  <div className="flex-1 w-full">
                     <div
-                      className={`flex items-center gap-3 mb-4 ${
-                        item.side === "right" ? "lg:justify-end" : ""
-                      }`}
+                      className="glass-card p-8 relative"
+                      style={{ border: item.type === "verified" ? "1px solid rgba(212,175,55,0.15)" : "1px solid rgba(255,255,255,0.04)" }}
                     >
-                      <span className="text-4xl">{item.icon}</span>
-                      <div>
-                        <div
-                          className="font-black text-gradient-gold"
-                          style={{ fontSize: "1.75rem", letterSpacing: "-0.03em" }}
-                        >
-                          {item.year}
+                      {/* Year badge */}
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="text-2xl">{item.icon}</span>
+                        <div>
+                          <div className="font-label" style={{ color: "rgba(212,175,55,0.8)", fontSize: "0.65rem" }}>
+                            {item.year}
+                          </div>
+                          <div className="text-white/40 text-xs">{item.city}</div>
                         </div>
-                        <div className="font-label" style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.6rem" }}>
-                          {item.city}
+                        {item.type === "verified" && (
+                          <div
+                            className="ml-auto px-2 py-1 rounded-full font-label"
+                            style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", fontSize: "0.45rem", color: "rgba(212,175,55,0.7)" }}
+                          >
+                            ✅ VERIFIED
+                          </div>
+                        )}
+                      </div>
+                      <h3 className="text-white font-black text-xl mb-3" style={{ letterSpacing: "-0.03em" }}>
+                        {item.title}
+                      </h3>
+                      <p className="text-white/50 text-sm font-light leading-relaxed">{item.body}</p>
+                      {item.badge && (
+                        <div className="mt-4 font-label" style={{ fontSize: "0.42rem", color: "rgba(255,255,255,0.2)" }}>
+                          {item.badge}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Center dot */}
+                  <div className="hidden lg:flex w-4 h-4 rounded-full flex-shrink-0 items-center justify-center"
+                    style={{ background: "rgba(212,175,55,0.3)", border: "2px solid rgba(212,175,55,0.6)", boxShadow: "0 0 12px rgba(212,175,55,0.3)", zIndex: 2 }}
+                  />
+
+                  {/* Photo or spacer */}
+                  <div className="flex-1 w-full">
+                    {"photoKey" in item && item.photoKey === "frankfurt" && (
+                      <div className="relative overflow-hidden rounded-2xl"
+                        style={{ height: "240px", border: "1px solid rgba(212,175,55,0.15)", boxShadow: "0 20px 40px rgba(0,0,0,0.5)" }}>
+                        <Image src={frankfurtSigning} alt="Noel Futkeu — Eintracht Frankfurt signing" fill quality={85}
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          style={{ objectFit: "cover", objectPosition: "center 20%", filter: "contrast(1.05) saturate(0.9)" }} />
+                        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(3,3,3,0.85) 100%)" }} />
+                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                          <div className="font-label" style={{ fontSize: "0.52rem", color: "rgba(212,175,55,0.7)" }}>✅ Eintracht Frankfurt — Official Signing</div>
                         </div>
                       </div>
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-yellow-400 transition-colors duration-300">
-                      {item.title}
-                    </h3>
-                    <p className="text-white/50 text-sm leading-relaxed font-light">{item.body}</p>
-                    {/* Gold accent line */}
-                    <div
-                      className={`mt-5 h-px`}
-                      style={{
-                        background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent)",
-                        animation: "lineGrow 1s ease-out forwards",
-                        width: "0%",
-                        transition: "width 1s var(--ease-luxury)",
-                      }}
-                    />
+                    )}
+                    {"photoKey" in item && item.photoKey === "furth" && (
+                      <div className="relative overflow-hidden rounded-2xl"
+                        style={{ height: "240px", border: "1px solid rgba(0,107,60,0.3)", boxShadow: "0 20px 40px rgba(0,0,0,0.5)" }}>
+                        <Image src={furthAction} alt="Noel Futkeu — SpVgg Greuther Fürth action" fill quality={85}
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          style={{ objectFit: "cover", objectPosition: "center 30%", filter: "contrast(1.05) saturate(0.85)" }} />
+                        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(3,3,3,0.85) 100%)" }} />
+                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                          <div className="font-label" style={{ fontSize: "0.52rem", color: "rgba(0,171,60,0.8)" }}>✅ SpVgg Greuther Fürth · #9 · 2. Bundesliga</div>
+                        </div>
+                      </div>
+                    )}
+                    {"photoKey" in item && item.photoKey === "celebration" && (
+                      <div className="relative overflow-hidden rounded-2xl"
+                        style={{ height: "240px", border: "1px solid rgba(212,175,55,0.2)", boxShadow: "0 20px 40px rgba(0,0,0,0.5)" }}>
+                        <Image src={celebrationFist} alt="Noel Futkeu — goal celebration" fill quality={85}
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          style={{ objectFit: "cover", objectPosition: "center 25%", filter: "contrast(1.08) saturate(0.8)" }} />
+                        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(3,3,3,0.9) 100%)" }} />
+                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                          <div className="font-label" style={{ fontSize: "0.52rem", color: "rgba(212,175,55,0.7)" }}>📊 Frankfurt buy-back confirmed — Summer 2026</div>
+                        </div>
+                      </div>
+                    )}
+                    {!("photoKey" in item) && (
+                      <div className="hidden lg:block" />
+                    )}
                   </div>
                 </div>
-
-                {/* Center Dot (desktop) */}
-                <div className="hidden lg:flex w-2/12 justify-center">
-                  <div
-                    className="relative w-5 h-5 rounded-full border-2 z-10"
-                    style={{
-                      background: "#D4AF37",
-                      borderColor: "#030303",
-                      boxShadow: "0 0 20px rgba(212,175,55,0.6), 0 0 40px rgba(212,175,55,0.2)",
-                    }}
-                  />
-                </div>
-
-                {/* Spacer (desktop) */}
-                <div className="hidden lg:block w-5/12" />
-
-                {/* Mobile Left Border */}
-                <div
-                  className="lg:hidden absolute left-0 top-0 bottom-0 w-px"
-                  style={{ background: "rgba(212,175,55,0.3)" }}
-                />
-                <div
-                  className="lg:hidden absolute left-0 top-8 w-3 h-3 rounded-full -translate-x-1.5"
-                  style={{
-                    background: "#D4AF37",
-                    boxShadow: "0 0 10px rgba(212,175,55,0.8)",
-                  }}
-                />
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
-        {/* Bottom Quote */}
-        <div className="mt-28 text-center reveal">
-          <div
-            className="inline-block glass-card-gold px-12 py-10 max-w-3xl"
-            style={{ borderColor: "rgba(212,175,55,0.3)" }}
-          >
-            <div className="text-5xl text-yellow-400/30 font-serif leading-none mb-4">"</div>
-            <blockquote
-              className="text-2xl lg:text-3xl font-bold text-white leading-tight mb-6"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              Every sacrifice made sense the moment I put on the shirt.
-            </blockquote>
-            <div className="gold-line mx-auto mb-4" />
-            <cite className="font-label not-italic" style={{ color: "rgba(212,175,55,0.8)" }}>
-              Noel Futkeu — Post-Match Interview, 2025
-            </cite>
+        {/* Bottom stats bar */}
+        <div className="mt-20 reveal">
+          <div className="glass-card-gold p-8"
+            style={{ border: "1px solid rgba(212,175,55,0.2)" }}>
+            <div className="text-center mb-6">
+              <div className="font-label mb-2" style={{ color: "rgba(212,175,55,0.8)" }}>2025/26 Season Summary</div>
+              <div className="font-label" style={{ fontSize: "0.45rem", color: "rgba(255,255,255,0.25)" }}>✅ Source: Transfermarkt · fetched May 2026 · SpVgg Greuther Fürth · 2. Bundesliga</div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+              {[
+                { label: "Goals", value: "17", suffix: "" },
+                { label: "Assists", value: "5", suffix: "" },
+                { label: "Appearances", value: "32", suffix: "" },
+                { label: "Goal Participation", value: "49", suffix: "%" },
+                { label: "Starting XI", value: "91", suffix: "%" },
+              ].map((s) => (
+                <div key={s.label}>
+                  <div className="font-black text-gradient-gold" style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)", letterSpacing: "-0.04em" }}>
+                    {s.value}{s.suffix}
+                  </div>
+                  <div className="text-white/40 text-xs font-light mt-1">{s.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

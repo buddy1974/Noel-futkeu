@@ -1,37 +1,50 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { AI_SCOUT, SEASON_STATS_2526, PLAYER, CLUBS, MARKET_VALUE } from "@/config/player";
 
+/**
+ * SCOUT MODE — AI-powered scouting intelligence
+ * All ratings sourced from AI_SCOUT config in player.ts
+ * ✅ VERIFIED facts from player.ts | 🤖 AI_SIM projections clearly labeled
+ */
+
+// Derived from AI_SCOUT config — strength descriptions added here for UI
 const STRENGTHS = [
-  { label: "Clinical Finishing", score: 95, desc: "Elite conversion rate in 1v1 and box situations" },
-  { label: "Explosive Acceleration", score: 97, desc: "0–10m burst among fastest in Europe" },
-  { label: "Technical Dribbling", score: 91, desc: "High success in tight spaces under pressure" },
-  { label: "Aerial Threat", score: 82, desc: "Strong in the box despite physical frame" },
-  { label: "Hold-Up Play", score: 78, desc: "Capable of linking play and bringing team forward" },
-  { label: "High Press Intensity", score: 88, desc: "Exceptional work rate, triggers press effectively" },
+  { label: "Clinical Finishing",      score: 95, desc: `Elite conversion — ${SEASON_STATS_2526.goals} goals in ${SEASON_STATS_2526.appearances} games confirms this` },
+  { label: "Explosive Acceleration",  score: 97, desc: "0–10m burst among top profiles in 2. Bundesliga" },
+  { label: "Positioning",             score: 91, desc: `${SEASON_STATS_2526.startingElevenPct}% starting XI rate confirms tactical trust` },
+  { label: "Aerial Threat",           score: 82, desc: `${PLAYER.height} frame — strong presence at set pieces` },
+  { label: "Hold-Up Play",            score: 78, desc: "Links play, brings teammates into game effectively" },
+  { label: "High Press Intensity",    score: 88, desc: "Exceptional work rate, effective in press-heavy systems" },
 ];
 
-const LEAGUE_FIT = [
-  { league: "Bundesliga", fit: 96, flag: "🇩🇪", reason: "High-press systems, space behind defenses" },
-  { league: "Ligue 1", fit: 94, flag: "🇫🇷", reason: "Dynamic attackers rewarded, transition football" },
-  { league: "Serie A", fit: 87, flag: "🇮🇹", reason: "Tactical flexibility, strong counter-attack play" },
-  { league: "Premier League", fit: 92, flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", reason: "Physicality and pace ideal for EPL intensity" },
-  { league: "La Liga", fit: 85, flag: "🇪🇸", reason: "Positional play developing, technical base strong" },
-];
+// Built from AI_SCOUT.leagueFit config
+const LEAGUE_FIT = AI_SCOUT.leagueFit.map((l) => ({
+  league: l.league,
+  fit: l.score,
+  reason: l.note,
+  flag: l.league === "Bundesliga" ? "🇩🇪"
+      : l.league === "Eredivisie" ? "🇳🇱"
+      : l.league === "Ligue 1" ? "🇫🇷"
+      : l.league === "Championship (ENG)" ? "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
+      : "🌍",
+}));
 
-const FORMATIONS = [
-  { name: "4-3-3", fit: 98, role: "CF / LW" },
-  { name: "4-2-3-1", fit: 95, role: "CAM / ST" },
-  { name: "3-5-2", fit: 88, role: "ST" },
-  { name: "4-4-2", fit: 82, role: "ST" },
-];
+// Built from AI_SCOUT.formationFit config
+const FORMATIONS = AI_SCOUT.formationFit.map((f) => ({
+  name: f.formation,
+  role: f.position,
+  fit: f.score,
+}));
 
 const REPORT_LINES = [
-  "Analysing 38 match datasets across 2025/26 season...",
-  "Processing 4,820 touch events and positional data...",
-  "Generating tactical intelligence profile...",
-  "Calculating league compatibility matrix...",
-  "Projecting market value trajectory...",
-  "Report ready. Loading scout analysis...",
+  `Loading player profile: ${PLAYER.fullName} · DOB ${PLAYER.dateOfBirth} · ${PLAYER.placeOfBirth}...`,
+  `Club: ${CLUBS.loanClub.name} (loan) → ${CLUBS.parentClub.name} summer 2026...`,
+  `Parsing verified stats: ${SEASON_STATS_2526.goals}G / ${SEASON_STATS_2526.assists}A / ${SEASON_STATS_2526.appearances} apps · ${SEASON_STATS_2526.league} ${SEASON_STATS_2526.fetchedDate}...`,
+  "Generating AI tactical intelligence profile...",
+  "Calculating AI league compatibility matrix...",
+  "Running AI attribute model and acceleration projection...",
+  "🤖 AI Report ready — simulated projection, not official scouting data.",
 ];
 
 export default function ScoutMode() {
@@ -78,10 +91,7 @@ export default function ScoutMode() {
       }, 700);
       return () => clearTimeout(t);
     } else {
-      const t = setTimeout(() => {
-        setGenerating(false);
-        setGenerated(true);
-      }, 400);
+      const t = setTimeout(() => { setGenerating(false); setGenerated(true); }, 400);
       return () => clearTimeout(t);
     }
   }, [generating, lineIndex]);
@@ -106,14 +116,18 @@ export default function ScoutMode() {
             className="font-black text-white leading-none mb-6"
             style={{ fontSize: "clamp(2.5rem, 7vw, 5.5rem)", letterSpacing: "-0.04em" }}
           >
-            AI{" "}
-            <span className="text-gradient-gold">Scout</span>{" "}
-            Mode
+            AI{" "}<span className="text-gradient-gold">Scout</span>{" "}Mode
           </h2>
-          <p className="text-white/40 text-lg max-w-2xl mx-auto font-light">
-            The future of player evaluation. Real AI-powered scouting intelligence —
-            tactical analysis, league compatibility, and market projections.
+          <p className="text-white/40 text-base max-w-xl mx-auto font-light">
+            AI-powered scouting intelligence — tactical analysis and league compatibility
+            based on {PLAYER.firstName}&apos;s confirmed profile.
           </p>
+          <div
+            className="mt-4 inline-block px-4 py-2 rounded-full glass-card font-label"
+            style={{ fontSize: "0.55rem", letterSpacing: "0.15em", border: "1px solid rgba(212,175,55,0.1)", color: "rgba(255,255,255,0.3)" }}
+          >
+            🤖 ALL SCOUT RATINGS ARE AI-GENERATED PROJECTIONS · NOT OFFICIAL ASSESSMENTS
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -143,103 +157,88 @@ export default function ScoutMode() {
                   </div>
                 ))}
               </div>
+              <div className="mt-6 p-3 rounded-xl" style={{ background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.1)" }}>
+                <div className="font-label" style={{ fontSize: "0.42rem", color: "rgba(255,255,255,0.2)" }}>
+                  🤖 Strength scores are AI-generated projections. Not official club or FIFA/UEFA data.
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Center: AI Report Generator */}
           <div className="reveal">
-            <div
-              className="glass-card p-8 h-full scan-effect"
-              style={{ border: "1px solid rgba(212,175,55,0.15)" }}
-            >
+            <div className="glass-card p-8 h-full scan-effect" style={{ border: "1px solid rgba(212,175,55,0.15)" }}>
               <div className="font-label mb-4">AI Scout Report Generator</div>
 
-              {/* Terminal UI */}
+              {/* Terminal */}
               <div
-                className="rounded-xl p-5 mb-6 font-mono text-xs min-h-[240px] relative overflow-hidden"
+                className="rounded-xl p-5 mb-6 font-mono text-xs min-h-[240px]"
                 style={{ background: "#020202", border: "1px solid rgba(212,175,55,0.1)" }}
               >
-                {/* Toolbar */}
                 <div className="flex items-center gap-1.5 mb-4">
                   <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#CE1126" }} />
                   <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#FCD116" }} />
                   <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#007A5E" }} />
                   <span className="ml-2 text-white/20 text-xs">scout_ai — analysis_engine.exe</span>
                 </div>
-                {/* Lines */}
                 <div className="space-y-1.5">
-                  <p style={{ color: "rgba(212,175,55,0.6)" }}>
-                    {">"} initializing noel_futkeu_profile...
-                  </p>
+                  <p style={{ color: "rgba(212,175,55,0.6)" }}>{">"} initializing {PLAYER.lastName.toLowerCase()}_profile...</p>
                   {reportLines.map((line, i) => (
-                    <p
-                      key={i}
-                      style={{ color: i === reportLines.length - 1 ? "#22c55e" : "rgba(255,255,255,0.5)" }}
-                    >
-                      {i === reportLines.length - 1 ? "✓ " : "→ "}
-                      {line}
+                    <p key={i} style={{ color: i === reportLines.length - 1 ? "#22c55e" : "rgba(255,255,255,0.5)" }}>
+                      {i === reportLines.length - 1 ? "✓ " : "→ "}{line}
                     </p>
                   ))}
                   {generating && (
-                    <p style={{ color: "#D4AF37" }}>
-                      {">"}{" "}
-                      <span style={{ animation: "dotBlink 0.8s ease-in-out infinite" }}>
-                        processing...
-                      </span>
+                    <p style={{ color: "#D4AF37" }}>{">"}{" "}
+                      <span style={{ animation: "dotBlink 0.8s ease-in-out infinite" }}>processing...</span>
                     </p>
                   )}
                   {!generating && !generated && reportLines.length === 0 && (
-                    <p style={{ color: "rgba(255,255,255,0.25)" }}>
-                      {">"} Ready. Click Generate to run analysis.
-                    </p>
+                    <p style={{ color: "rgba(255,255,255,0.25)" }}>{">"} Ready. Click Generate to run analysis.</p>
                   )}
                 </div>
               </div>
 
-              {/* Generate Button */}
               {!generated && (
-                <button
-                  onClick={startGeneration}
-                  disabled={generating}
-                  className="btn-gold w-full mb-6"
-                  style={{ opacity: generating ? 0.6 : 1 }}
-                >
+                <button onClick={startGeneration} disabled={generating} className="btn-gold w-full mb-6"
+                  style={{ opacity: generating ? 0.6 : 1 }}>
                   {generating ? "Generating..." : "Generate Scout Report"}
                 </button>
               )}
 
-              {/* Report Output */}
               {generated && (
-                <div
-                  className="rounded-xl p-6 space-y-4"
-                  style={{
-                    background: "rgba(212,175,55,0.04)",
-                    border: "1px solid rgba(212,175,55,0.2)",
-                  }}
-                >
+                <div className="rounded-xl p-6 space-y-4"
+                  style={{ background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.2)" }}>
                   <div className="flex items-center gap-3 mb-4">
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center"
-                      style={{ background: "rgba(212,175,55,0.2)" }}
-                    >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center"
+                      style={{ background: "rgba(212,175,55,0.2)" }}>
                       <span>🤖</span>
                     </div>
                     <div>
                       <div className="text-white text-xs font-bold">AI Scout Analysis</div>
                       <div className="font-label" style={{ fontSize: "0.55rem", color: "rgba(212,175,55,0.6)" }}>
-                        Confidence: 94%
+                        {AI_SCOUT.disclaimer}
                       </div>
                     </div>
                   </div>
                   <div className="space-y-3 text-sm text-white/70 leading-relaxed font-light">
                     <p>
-                      <span className="text-yellow-400 font-semibold">Profile:</span> Elite attacking forward with exceptional pace (top 3% globally) and clinical finishing.
+                      <span className="text-yellow-400 font-semibold">Profile (AI):</span>{" "}
+                      Striker with explosive pace profile and clinical box presence.{" "}
+                      {SEASON_STATS_2526.goals} goals in {SEASON_STATS_2526.appearances} games at{" "}
+                      {SEASON_STATS_2526.league} level — confirmed readiness for Bundesliga step-up.
                     </p>
                     <p>
-                      <span className="text-yellow-400 font-semibold">Best fit:</span> High-press Bundesliga systems — RB Leipzig, Bayer Leverkusen profiles.
+                      <span className="text-yellow-400 font-semibold">Best fit (AI):</span>{" "}
+                      {AI_SCOUT.leagueFit[0].note}. Returning to {CLUBS.parentClub.name} positions
+                      him at European-level football.
                     </p>
                     <p>
-                      <span className="text-yellow-400 font-semibold">Verdict:</span> Ready for top-5 European league. Market value trajectory: +40% over 18 months.
+                      <span className="text-yellow-400 font-semibold">Strengths (AI):</span>{" "}
+                      {AI_SCOUT.strengthsProfile.slice(0, 3).join(" · ")}
+                    </p>
+                    <p className="font-label" style={{ fontSize: "0.5rem", color: "rgba(255,255,255,0.25)" }}>
+                      🤖 {AI_SCOUT.disclaimer}
                     </p>
                   </div>
                   <button
@@ -253,7 +252,7 @@ export default function ScoutMode() {
             </div>
           </div>
 
-          {/* Right: League Fit */}
+          {/* Right: League Fit + Formation + Market Value */}
           <div className="space-y-4 reveal-right">
             <div className="glass-card p-6">
               <div className="font-label mb-5">League Compatibility</div>
@@ -281,51 +280,47 @@ export default function ScoutMode() {
                   </div>
                 ))}
               </div>
+              <div className="mt-4 font-label" style={{ fontSize: "0.42rem", color: "rgba(255,255,255,0.2)" }}>
+                🤖 League scores are AI-generated projections · not official assessments
+              </div>
             </div>
 
-            {/* Formation Fit */}
             <div className="glass-card p-6">
               <div className="font-label mb-5">Formation Fit</div>
               <div className="grid grid-cols-2 gap-3">
                 {FORMATIONS.map((f) => (
-                  <div
-                    key={f.name}
-                    className="text-center p-4 rounded-xl transition-all duration-300 hover:scale-105"
+                  <div key={f.name} className="text-center p-4 rounded-xl transition-all duration-300 hover:scale-105"
                     style={{
                       background: f.fit >= 95 ? "rgba(212,175,55,0.1)" : "rgba(255,255,255,0.02)",
                       border: `1px solid ${f.fit >= 95 ? "rgba(212,175,55,0.3)" : "rgba(255,255,255,0.06)"}`,
-                    }}
-                  >
+                    }}>
                     <div className={`font-black text-xl mb-1 ${f.fit >= 95 ? "text-gradient-gold" : "text-white/50"}`}>
                       {f.name}
                     </div>
-                    <div className="font-label" style={{ fontSize: "0.55rem", color: "rgba(212,175,55,0.7)" }}>
-                      {f.role}
-                    </div>
-                    <div className="font-label mt-1" style={{ fontSize: "0.55rem", color: "rgba(255,255,255,0.3)" }}>
-                      {f.fit}% fit
-                    </div>
+                    <div className="font-label" style={{ fontSize: "0.55rem", color: "rgba(212,175,55,0.7)" }}>{f.role}</div>
+                    <div className="font-label mt-1" style={{ fontSize: "0.55rem", color: "rgba(255,255,255,0.3)" }}>{f.fit}% fit</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Market Value */}
-            <div
-              className="glass-card-gold p-6"
-              style={{ border: "1px solid rgba(212,175,55,0.25)" }}
-            >
-              <div className="font-label mb-3">Market Value Projection</div>
-              <div
-                className="font-black text-gradient-gold mb-1"
-                style={{ fontSize: "2.5rem", letterSpacing: "-0.04em" }}
-              >
-                €12M
+            <div className="glass-card-gold p-6" style={{ border: "1px solid rgba(212,175,55,0.2)" }}>
+              <div className="font-label mb-1" style={{ fontSize: "0.6rem" }}>Market Value</div>
+              <div className="font-label mb-3" style={{ fontSize: "0.45rem", color: "rgba(255,255,255,0.2)" }}>
+                ✅ Last verified: {MARKET_VALUE.value} (Transfermarkt, {MARKET_VALUE.lastUpdated})
               </div>
-              <div className="text-white/40 text-xs font-light mb-3">Current Estimated Value</div>
+              <div className="font-black text-gradient-gold mb-1" style={{ fontSize: "2rem", letterSpacing: "-0.04em" }}>
+                Rising ↑
+              </div>
+              <div className="text-white/40 text-xs font-light mb-3">
+                Post-{SEASON_STATS_2526.goals}-goal season — trajectory strongly upward
+              </div>
               <div className="flex items-center gap-2">
-                <span className="text-green-400 font-bold text-sm">↑ +40%</span>
-                <span className="text-white/30 text-xs">projected 18 months</span>
+                <span className="text-green-400 font-bold text-sm">↑ Positive</span>
+                <span className="text-white/30 text-xs">AI-projected trajectory</span>
+              </div>
+              <div className="mt-3 font-label" style={{ fontSize: "0.42rem", color: "rgba(255,255,255,0.15)" }}>
+                🤖 Trajectory is AI-estimated. Verified figure: {MARKET_VALUE.value} ({MARKET_VALUE.lastUpdated}, Transfermarkt)
               </div>
             </div>
           </div>

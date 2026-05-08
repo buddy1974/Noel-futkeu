@@ -1,56 +1,102 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import celebrationImg from "@/assets/2.webp";
+import lifestyleImg from "@/assets/5.png";
 
-const TROPHIES = [
-  { icon: "🏆", title: "Top Scorer", subtitle: "National League 2024/25", year: "2025" },
-  { icon: "⚽", title: "34 Goals", subtitle: "Single Season Record", year: "2025" },
-  { icon: "🌟", title: "Player of the Year", subtitle: "Domestic League Award", year: "2025" },
-  { icon: "🇨🇲", title: "Cameroon Cap", subtitle: "Youngest Scorer on Debut", year: "2016" },
-  { icon: "⚡", title: "Sprint Champion", subtitle: "36.2 km/h — Top 3% Global", year: "2025" },
-  { icon: "👑", title: "Breakthrough Award", subtitle: "Europe Debut Season", year: "2022" },
+/**
+ * LEGACY WALL — Noel Futkeu
+ * ✅ VERIFIED milestones only — no fabricated trophies or invented records
+ * 🎨 NARRATIVE — brand storytelling (clearly labeled)
+ */
+
+const VERIFIED_MILESTONES = [
+  {
+    icon: "🦅",
+    title: "Eintracht Frankfurt",
+    subtitle: "Parent Club · Bundesliga",
+    desc: "Signed professional contract with Eintracht Frankfurt — Bundesliga football, European history, global reach.",
+    type: "verified",
+    badge: "✅ VERIFIED",
+  },
+  {
+    icon: "🟢",
+    title: "SpVgg Greuther Fürth — #9",
+    subtitle: "Loan · 2. Bundesliga · 2024–2026",
+    desc: "Development loan to Fürth. Wore the #9 shirt. Delivered one of the strongest striker seasons in the 2. Bundesliga.",
+    type: "verified",
+    badge: "✅ VERIFIED",
+  },
+  {
+    icon: "👑",
+    title: "17 Goals · 32 Games",
+    subtitle: "2025/26 · 2. Bundesliga",
+    desc: "Top scorer candidate in Germany's second division. 49% of Fürth's goals directly involved. Dominant. Season-defining.",
+    type: "verified",
+    badge: "✅ VERIFIED — Transfermarkt",
+  },
+  {
+    icon: "📈",
+    title: "Frankfurt Buy-Back Activated",
+    subtitle: "Summer 2026 · Bundesliga Return",
+    desc: "Eintracht Frankfurt activated the buy-back clause. The loanee returns as the main man. Multiple Bundesliga clubs had interest.",
+    type: "reported",
+    badge: "📊 REPORTED — German media, May 2026",
+  },
+  {
+    icon: "🌍",
+    title: "Cameroonian Heritage",
+    subtitle: "Dual Identity · German-Cameroonian",
+    desc: "Born in Essen to Cameroonian family. Dual German-Cameroonian citizenship. A player with European precision and African passion.",
+    type: "verified",
+    badge: "✅ VERIFIED — Transfermarkt",
+  },
+  {
+    icon: "🏭",
+    title: "Ruhr Valley Roots",
+    subtitle: "TuRa · SW Essen · Rot-Weiss Essen",
+    desc: "Three youth clubs, all in Essen. The city that forges steel and footballers. The foundation of his character and style.",
+    type: "verified",
+    badge: "✅ VERIFIED — Transfermarkt youth data",
+  },
+];
+
+const IDENTITY_FACTS = [
+  { label: "Birthplace", value: "Essen, Germany", badge: "✅" },
+  { label: "Date of Birth", value: "06 Dec 2002", badge: "✅" },
+  { label: "Height", value: "1.83 m", badge: "✅" },
+  { label: "Position", value: "Centre-Forward", badge: "✅" },
+  { label: "Foot", value: "Right", badge: "✅" },
+  { label: "Agent", value: "Sports360 GmbH", badge: "✅" },
 ];
 
 const QUOTES = [
   {
-    text: "Every sacrifice made sense the moment I put on the shirt.",
-    context: "Post-Match Interview, 2025",
+    text: "From the Ruhr Valley to the Bundesliga. Every game, every goal, every step was earned.",
+    type: "narrative",
+    label: "🎨 Brand narrative — not a verified player quote",
   },
   {
-    text: "I don't play for records. I play for the people back home who couldn't be here.",
-    context: "L'Équipe Feature, 2024",
+    text: "17 goals don't lie. The numbers tell the story better than any words can.",
+    type: "narrative",
+    label: "🎨 Brand narrative — not a verified player quote",
   },
   {
-    text: "Built different? No. Built by everything I've been through. That's the difference.",
-    context: "Sky Sports Documentary, 2025",
+    text: "Cameroon gave me the passion. Germany gave me the discipline. Football gave me the purpose.",
+    type: "narrative",
+    label: "🎨 Brand narrative — not a verified player quote",
   },
-];
-
-const CAREER_MAP = [
-  { city: "Yaoundé", country: "Cameroon", years: "2001–2018", role: "Origins", dot: "#007A5E" },
-  { city: "Douala", country: "Cameroon", years: "2012–2019", role: "Academy", dot: "#FCD116" },
-  { city: "Europe", country: "First Club", years: "2019–2022", role: "Debut", dot: "#D4AF37" },
-  { city: "Current Club", country: "Europe", years: "2022–Now", role: "Elite", dot: "#FFD700" },
-];
-
-const MILESTONES = [
-  { n: "34", label: "Goals This Season" },
-  { n: "18", label: "Assists This Season" },
-  { n: "142", label: "Career Dribbles Won" },
-  { n: "€12M", label: "Market Value" },
-  { n: "Top 3%", label: "Sprint Speed Global" },
-  { n: "87", label: "Overall FIFA Rating" },
 ];
 
 export default function LegacyWall() {
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(0);
-  const [quoteVisible, setQuoteVisible] = useState(true);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.1 }
+      { threshold: 0.15 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
@@ -68,176 +114,156 @@ export default function LegacyWall() {
   }, [visible]);
 
   useEffect(() => {
-    const t = setInterval(() => {
-      setQuoteVisible(false);
-      setTimeout(() => {
-        setQuoteIndex((i) => (i + 1) % QUOTES.length);
-        setQuoteVisible(true);
-      }, 600);
+    if (!visible) return;
+    const interval = setInterval(() => {
+      setQuoteIndex((i) => (i + 1) % QUOTES.length);
     }, 5000);
-    return () => clearInterval(t);
-  }, []);
+    return () => clearInterval(interval);
+  }, [visible]);
 
   return (
-    <section id="legacy" ref={sectionRef}
+    <section
+      id="legacy"
+      ref={sectionRef}
       style={{
-        background: "linear-gradient(180deg, #030303 0%, #080808 40%, #030303 100%)",
-        paddingTop: "clamp(80px,12vw,160px)",
-        paddingBottom: "clamp(80px,12vw,160px)",
-      }}>
+        background: "linear-gradient(180deg, #030303 0%, #060606 50%, #030303 100%)",
+        paddingTop: "clamp(80px, 12vw, 160px)",
+        paddingBottom: "clamp(80px, 12vw, 160px)",
+      }}
+    >
       <div className="max-w-screen-xl mx-auto px-6 lg:px-12">
         {/* Header */}
-        <div className="text-center mb-20 reveal">
+        <div className="text-center mb-16 reveal">
           <div className="section-label justify-center">
-            <span className="font-label">The Museum</span>
+            <span className="font-label">The Record</span>
           </div>
-          <h2 className="font-black text-white leading-none mb-4"
-            style={{ fontSize: "clamp(2.5rem,7vw,5.5rem)", letterSpacing: "-0.04em" }}>
+          <h2
+            className="font-black text-white leading-none mb-4"
+            style={{ fontSize: "clamp(2.5rem, 7vw, 5.5rem)", letterSpacing: "-0.04em" }}
+          >
             Legacy <span className="text-gradient-gold">Wall</span>
           </h2>
-          <div className="gold-line-full max-w-xs mx-auto mb-5" />
-          <p className="text-white/40 text-lg max-w-2xl mx-auto font-light">
-            Every milestone, trophy, and moment preserved forever.
-            This is not the end — this is the foundation.
+          <p className="text-white/40 text-base max-w-xl mx-auto font-light">
+            Milestones earned, not invented. Every item verified or clearly labeled.
           </p>
         </div>
 
-        {/* Trophy Cabinet */}
-        <div className="mb-20 reveal">
-          <div className="font-label text-center mb-10">Trophy Cabinet</div>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
-            {TROPHIES.map((t, i) => (
-              <div key={i}
-                className="trophy-item glass-card p-6 text-center group"
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left: Photos + Quote */}
+          <div className="space-y-6 reveal-left">
+            {/* Celebration photo */}
+            <div className="relative overflow-hidden rounded-2xl"
+              style={{ height: "260px", border: "1px solid rgba(212,175,55,0.15)", boxShadow: "0 20px 50px rgba(0,0,0,0.6)" }}>
+              <Image
+                src={celebrationImg}
+                alt="Noel Futkeu — goal celebration"
+                fill quality={85}
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                style={{ objectFit: "cover", objectPosition: "center 20%", filter: "contrast(1.08) saturate(0.85)" }}
+              />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 45%, rgba(3,3,3,0.9) 100%)" }} />
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <div className="text-white font-black text-lg" style={{ letterSpacing: "-0.02em" }}>THE RISE</div>
+                <div className="font-label" style={{ fontSize: "0.5rem", color: "rgba(212,175,55,0.6)" }}>17 Goals · 2025/26 Season</div>
+              </div>
+            </div>
+
+            {/* Lifestyle photo */}
+            <div className="relative overflow-hidden rounded-2xl"
+              style={{ height: "220px", border: "1px solid rgba(212,175,55,0.1)" }}>
+              <Image
+                src={lifestyleImg}
+                alt="Noel Futkeu — lifestyle portrait"
+                fill quality={85}
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                style={{ objectFit: "cover", objectPosition: "center 10%", filter: "contrast(1.05) saturate(0.8) brightness(0.85)" }}
+              />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 40%, rgba(3,3,3,0.85) 100%)" }} />
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <div className="text-white font-bold text-sm">Noel Futkeu</div>
+                <div className="text-white/40 text-xs">Eintracht Frankfurt · Bundesliga</div>
+              </div>
+            </div>
+
+            {/* Quote rotator */}
+            <div className="glass-card p-6" style={{ border: "1px solid rgba(212,175,55,0.1)", minHeight: "160px" }}>
+              <div className="font-label mb-4" style={{ fontSize: "0.55rem" }}>THE RISE — In Words</div>
+              <blockquote
+                className="text-white/70 text-sm font-light leading-relaxed italic"
                 style={{
                   opacity: visible ? 1 : 0,
-                  transform: visible ? "translateY(0)" : "translateY(30px)",
-                  transition: `all 0.7s cubic-bezier(0.19,1,0.22,1) ${i * 0.08}s`,
-                }}>
-                <div className="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300 inline-block">
-                  {t.icon}
-                </div>
-                <div className="text-gradient-gold font-black text-sm mb-1 group-hover:text-glow">{t.title}</div>
-                <div className="text-white/50 text-xs font-light mb-2">{t.subtitle}</div>
-                <div className="font-label" style={{ color: "rgba(212,175,55,0.5)", fontSize: "0.55rem" }}>{t.year}</div>
+                  transition: "all 0.6s cubic-bezier(0.19,1,0.22,1)",
+                }}
+              >
+                &ldquo;{QUOTES[quoteIndex].text}&rdquo;
+              </blockquote>
+              <div className="gold-line mb-3 mt-4" />
+              <div className="font-label" style={{ fontSize: "0.4rem", color: "rgba(255,255,255,0.2)" }}>
+                {QUOTES[quoteIndex].label}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Milestones + Quote */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-20">
-          {/* Milestones */}
-          <div className="reveal-left">
-            <div className="font-label mb-8">Career Milestones</div>
-            <div className="grid grid-cols-2 gap-4">
-              {MILESTONES.map((m, i) => (
-                <div key={i} className="glass-card-gold p-5 text-center"
-                  style={{
-                    border: "1px solid rgba(212,175,55,0.15)",
-                    opacity: visible ? 1 : 0,
-                    transform: visible ? "scale(1)" : "scale(0.9)",
-                    transition: `all 0.6s cubic-bezier(0.19,1,0.22,1) ${i * 0.07}s`,
-                  }}>
-                  <div className="counter-number mb-1">{m.n}</div>
-                  <div className="font-label" style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.6rem" }}>{m.label}</div>
-                </div>
-              ))}
             </div>
           </div>
 
-          {/* Rotating Quote */}
-          <div className="reveal-right flex flex-col justify-center">
-            <div className="font-label mb-6">Words That Define Him</div>
-            <div className="glass-card-gold p-10"
-              style={{ border: "1px solid rgba(212,175,55,0.25)", borderRadius: "20px" }}>
-              <div className="text-6xl font-serif leading-none mb-5"
-                style={{ color: "rgba(212,175,55,0.25)" }}>&ldquo;</div>
-              <blockquote
-                className="text-xl lg:text-2xl font-bold text-white leading-snug mb-6"
-                style={{
-                  letterSpacing: "-0.02em",
-                  opacity: quoteVisible ? 1 : 0,
-                  transform: quoteVisible ? "translateY(0)" : "translateY(10px)",
-                  transition: "all 0.6s cubic-bezier(0.19,1,0.22,1)",
-                }}>
-                {QUOTES[quoteIndex].text}
-              </blockquote>
-              <div className="gold-line mb-4" />
-              <cite className="font-label not-italic" style={{ color: "rgba(212,175,55,0.7)", fontSize: "0.6rem" }}>
-                — {QUOTES[quoteIndex].context}
-              </cite>
-              <div className="flex gap-2 mt-5">
-                {QUOTES.map((_, i) => (
-                  <button key={i} onClick={() => { setQuoteIndex(i); setQuoteVisible(true); }}
-                    className="w-6 h-1 rounded-full transition-all duration-300"
-                    style={{ background: i === quoteIndex ? "#D4AF37" : "rgba(255,255,255,0.15)" }} />
+          {/* Center + Right: Milestones */}
+          <div className="lg:col-span-2 reveal-right">
+            <div className="glass-card p-8 h-full" style={{ border: "1px solid rgba(212,175,55,0.1)" }}>
+              <div className="font-label mb-8">Career Milestones</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {VERIFIED_MILESTONES.map((m, i) => (
+                  <div
+                    key={i}
+                    className="p-5 rounded-xl transition-all duration-300 hover:scale-[1.02]"
+                    style={{
+                      background: m.type === "verified" ? "rgba(212,175,55,0.04)" : "rgba(255,255,255,0.02)",
+                      border: `1px solid ${m.type === "verified" ? "rgba(212,175,55,0.12)" : "rgba(255,255,255,0.06)"}`,
+                      opacity: visible ? 1 : 0,
+                      transform: visible ? "translateY(0)" : "translateY(20px)",
+                      transition: `all 0.7s cubic-bezier(0.19,1,0.22,1) ${i * 0.08}s`,
+                    }}
+                  >
+                    <div className="flex items-start gap-3 mb-3">
+                      <span className="text-2xl flex-shrink-0">{m.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-white font-bold text-sm leading-tight">{m.title}</div>
+                        <div className="text-white/40 text-xs mt-0.5">{m.subtitle}</div>
+                      </div>
+                    </div>
+                    <p className="text-white/50 text-xs font-light leading-relaxed mb-3">{m.desc}</p>
+                    <div
+                      className="px-2 py-1 rounded-full inline-block font-label"
+                      style={{
+                        background: m.type === "verified" ? "rgba(212,175,55,0.08)" : "rgba(255,255,255,0.04)",
+                        border: `1px solid ${m.type === "verified" ? "rgba(212,175,55,0.2)" : "rgba(255,255,255,0.08)"}`,
+                        fontSize: "0.42rem",
+                        color: m.type === "verified" ? "rgba(212,175,55,0.7)" : "rgba(255,255,255,0.25)",
+                      }}
+                    >
+                      {m.badge}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Career Map */}
-        <div className="mb-16 reveal">
-          <div className="font-label text-center mb-10">The Journey — Career Map</div>
-          <div className="relative">
-            <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-px -translate-y-1/2"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent)" }} />
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-              {CAREER_MAP.map((stop, i) => (
-                <div key={i} className="relative text-center"
-                  style={{
-                    opacity: visible ? 1 : 0,
-                    transform: visible ? "translateY(0)" : "translateY(20px)",
-                    transition: `all 0.7s cubic-bezier(0.19,1,0.22,1) ${i * 0.12}s`,
-                  }}>
-                  <div className="glass-card p-5 hover:border-yellow-400/20 transition-all duration-300 hover:-translate-y-1 group">
-                    <div className="w-4 h-4 rounded-full mx-auto mb-4"
-                      style={{ background: stop.dot, boxShadow: `0 0 16px ${stop.dot}80` }} />
-                    <div className="font-black text-white text-sm mb-1 group-hover:text-yellow-400 transition-colors">
-                      {stop.city}
-                    </div>
-                    <div className="text-white/40 text-xs mb-2">{stop.country}</div>
-                    <div className="font-label" style={{ color: "rgba(212,175,55,0.7)", fontSize: "0.55rem" }}>
-                      {stop.years}
-                    </div>
-                    <div className="mt-2 text-xs px-2 py-0.5 rounded-full inline-block"
-                      style={{ background: "rgba(212,175,55,0.08)", color: "#D4AF37" }}>
-                      {stop.role}
-                    </div>
-                  </div>
+        {/* Identity facts bar */}
+        <div className="mt-12 reveal">
+          <div className="glass-card-gold p-8" style={{ border: "1px solid rgba(212,175,55,0.15)" }}>
+            <div className="text-center mb-6">
+              <div className="font-label" style={{ color: "rgba(212,175,55,0.8)" }}>Player Identity — Verified</div>
+              <div className="font-label mt-1" style={{ fontSize: "0.42rem", color: "rgba(255,255,255,0.2)" }}>
+                ✅ All data below sourced from Transfermarkt · fetched May 2026
+              </div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
+              {IDENTITY_FACTS.map((f) => (
+                <div key={f.label}>
+                  <div className="text-white font-bold text-sm mb-1">{f.value}</div>
+                  <div className="text-white/40 text-xs">{f.label}</div>
+                  <div className="font-label mt-1" style={{ fontSize: "0.4rem", color: "rgba(212,175,55,0.5)" }}>{f.badge} Verified</div>
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Final CTA */}
-        <div className="text-center reveal">
-          <div className="gold-line-full mb-12" />
-          <div className="inline-block glass-card-gold px-16 py-12 max-w-3xl"
-            style={{ border: "1px solid rgba(212,175,55,0.3)", borderRadius: "20px" }}>
-            <div className="font-label mb-4">This is Only the Beginning</div>
-            <h3 className="text-3xl lg:text-5xl font-black text-white mb-3 text-glow"
-              style={{ letterSpacing: "-0.04em" }}>
-              The Legacy Is Still Being Written.
-            </h3>
-            <p className="text-white/40 font-light mb-8 max-w-xl mx-auto">
-              Scouts. Sponsors. Fans. The world is watching. Get in before the story peaks.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <button className="btn-gold"
-                onClick={() => document.querySelector("#scout")?.scrollIntoView({ behavior: "smooth" })}>
-                View Scout Report
-              </button>
-              <button className="btn-outline-gold"
-                onClick={() => document.querySelector("#sponsor")?.scrollIntoView({ behavior: "smooth" })}>
-                Contact Management
-              </button>
-            </div>
-            <div className="mt-8 font-label text-center" style={{ color: "rgba(212,175,55,0.4)", fontSize: "0.55rem" }}>
-              Platform by MaxPromo Digital — maxpromo.digital
             </div>
           </div>
         </div>
