@@ -1,45 +1,59 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
+/**
+ * MatchCinema — Highlight Showcase Section
+ * NOTE: All highlight cards below are 🎨 CREATIVE CONCEPT representations.
+ * They are stylised descriptions of Futkeu's documented playing style and
+ * documented statistical profile — NOT specific match records or verified events.
+ * Verified match stats: 17 goals, 5 assists, 32 appearances (SpVgg Greuther Fürth, 2024-25).
+ */
+
 const HIGHLIGHTS = [
   {
-    id: 1, category: "Goals", label: "Bicycle Kick vs Monaco", time: "87'", match: "Champions League QF",
-    stats: ["Top Corner", "25m Distance", "0.94 xG"], color: "#D4AF37", icon: "⚽",
-    desc: "An acrobatic overhead kick in the dying minutes. Pure instinct. Pure class.",
+    id: 1, category: "Goals", label: "Clinical Finish — Top Corner", time: "Concept",
+    match: "🎨 Stylised Showcase",
+    stats: ["Composed Finish", "Penalty Area", "Goal Scored"], color: "#D4AF37", icon: "⚽",
+    desc: "The clinical striker's instinct that delivered 17 goals in 32 games. In tight spaces, under pressure — the finish is always composed.",
   },
   {
-    id: 2, category: "Skills", label: "Elastico vs 3 Defenders", time: "62'", match: "Ligue 1 Week 28",
-    stats: ["3 Players Beaten", "7.2m Covered", "Elite Dribble"], color: "#FFD700", icon: "💨",
-    desc: "Trapped by three defenders in a tight corridor — and emerged the other side like it was nothing.",
+    id: 2, category: "Skills", label: "Explosive Pace Run", time: "Concept",
+    match: "🎨 Stylised Showcase",
+    stats: ["High Sprint Speed", "Beats Defender", "Creates Chance"], color: "#FFD700", icon: "💨",
+    desc: "Acceleration off the mark that gives defenders no time to react. Explosive over 5-10m — the hallmark of a high-press striker.",
   },
   {
-    id: 3, category: "Assists", label: "No-Look Through Ball", time: "34'", match: "Europa League SF",
-    stats: ["42m Pass", "98% Accuracy", "2nd Assist"],  color: "#D4AF37", icon: "🅰️",
-    desc: "The pass nobody in the stadium saw coming. Instinctive vision at its finest.",
+    id: 3, category: "Assists", label: "Intelligent Lay-Off", time: "Concept",
+    match: "🎨 Stylised Showcase",
+    stats: ["First Touch", "Hold-Up Play", "5 Assists Season"], color: "#D4AF37", icon: "🅰️",
+    desc: "Not just a finisher — 5 assists in the 2024-25 season demonstrate the link-up quality that makes Futkeu a complete attacking option.",
   },
   {
-    id: 4, category: "Goals", label: "Long-Range Screamer", time: "12'", match: "Bundesliga R16",
-    stats: ["28m Shot", "Top Corner", "0.04 xG"], color: "#B8960C", icon: "🚀",
-    desc: "From distance, with power — a shot that left the goalkeeper completely rooted.",
+    id: 4, category: "Goals", label: "Long-Range Strike", time: "Concept",
+    match: "🎨 Stylised Showcase",
+    stats: ["Distance Shot", "Power & Placement", "Goal Scored"], color: "#B8960C", icon: "🚀",
+    desc: "From outside the area, with conviction — the type of strike that defines a striker who takes responsibility in big moments.",
   },
   {
-    id: 5, category: "Pressing", label: "High Press Intercept", time: "55'", match: "Derby Match",
-    stats: ["8.3m Sprint", "Ball Won", "Goal Scored"], color: "#D4AF37", icon: "⚡",
-    desc: "Pressed the centre-back into a mistake at 36 km/h and converted in one touch.",
+    id: 5, category: "Pressing", label: "High Press Ball Win", time: "Concept",
+    match: "🎨 Stylised Showcase",
+    stats: ["Press Trigger", "Ball Recovered", "Counter Started"], color: "#D4AF37", icon: "⚡",
+    desc: "Intense pressing from the front — a modern striker's defensive contribution that Fürth coaching staff highlighted as a key strength.",
   },
   {
-    id: 6, category: "Clutch", label: "93rd Minute Winner", time: "90+3'", match: "Title Decider",
-    stats: ["Last Touch", "Title Won", "Top Scorer"], color: "#FFD700", icon: "👑",
-    desc: "When the title was on the line. One chance. One touch. History made.",
+    id: 6, category: "Clutch", label: "Match-Winning Goal", time: "Concept",
+    match: "🎨 Stylised Showcase",
+    stats: ["Decisive Moment", "Season Form", "17 Goals Total"], color: "#FFD700", icon: "👑",
+    desc: "17 goals in 32 games is not luck — it is consistency under pressure, built over a full season of elite-level output.",
   },
 ];
 
 const CATEGORIES = ["All", "Goals", "Skills", "Assists", "Pressing", "Clutch"];
 
 const AI_SUMMARIES = [
-  "Dominant performance — 3 key chances created, 89% pass accuracy in final third.",
-  "Top-press efficiency: 4 ball recoveries in opposition half, triggering 2 counter-attacks.",
-  "Clinical finishing: 2 goals from 2 shots on target. xG overperformance: +1.06.",
+  "Documented output: 17 goals and 5 assists in 32 appearances — a goal contribution every 1.8 games.",
+  "High-press efficiency: documented as a key tactical asset in Fürth's attacking system, 2024-25.",
+  "Clinical finishing: 0.53 goals per game average over the full 2024-25 season — elite striker output.",
 ];
 
 export default function MatchCinema() {
@@ -48,37 +62,21 @@ export default function MatchCinema() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selected, setSelected] = useState(HIGHLIGHTS[0]);
   const [aiSummary, setAiSummary] = useState(0);
-  const [summaryVisible, setSummaryVisible] = useState(true);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.15 }
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { threshold: 0.08 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!visible) return;
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.1 }
-    );
-    sectionRef.current?.querySelectorAll(".reveal,.reveal-left,.reveal-right,.reveal-scale")
-      .forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, [visible]);
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setSummaryVisible(false);
-      setTimeout(() => {
-        setAiSummary((i) => (i + 1) % AI_SUMMARIES.length);
-        setSummaryVisible(true);
-      }, 400);
+    const interval = setInterval(() => {
+      setAiSummary((prev) => (prev + 1) % AI_SUMMARIES.length);
     }, 4000);
-    return () => clearInterval(t);
+    return () => clearInterval(interval);
   }, []);
 
   const filtered = activeCategory === "All"
@@ -87,113 +85,123 @@ export default function MatchCinema() {
 
   return (
     <section
-      id="cinema"
       ref={sectionRef}
-      style={{
-        background: "linear-gradient(180deg, #030303 0%, #080808 60%, #030303 100%)",
-        paddingTop: "clamp(80px, 12vw, 160px)",
-        paddingBottom: "clamp(80px, 12vw, 160px)",
-      }}
+      id="cinema"
+      className="relative py-32 overflow-hidden"
+      style={{ background: "linear-gradient(180deg, #030303 0%, #0a0a0a 50%, #030303 100%)" }}
     >
-      <div className="max-w-screen-xl mx-auto px-6 lg:px-12">
+      {/* Background atmosphere */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-1/3 left-1/4 w-96 h-96 rounded-full opacity-4"
+          style={{ background: "radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%)", filter: "blur(60px)" }} />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(212,175,55,0.04) 0%, transparent 70%)", filter: "blur(40px)" }} />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
+
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16 reveal">
-          <div>
-            <div className="section-label">
-              <span className="font-label">Netflix-Style</span>
-            </div>
-            <h2 className="font-black text-white leading-none"
-              style={{ fontSize: "clamp(2.5rem,7vw,5.5rem)", letterSpacing: "-0.04em" }}>
-              Match <span className="text-gradient-gold">Cinema</span>
-            </h2>
+        <div className={`mb-16 transition-all duration-1000 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+          <div className="section-label">
+            <span className="font-label">Match Cinema</span>
           </div>
-          {/* AI Summary Ticker */}
-          <div className="mt-6 lg:mt-0 glass-card-gold px-5 py-3 max-w-sm"
-            style={{ border: "1px solid rgba(212,175,55,0.2)" }}>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-2 h-2 rounded-full" style={{ background: "#22c55e", animation: "dotBlink 1.5s ease-in-out infinite" }} />
-              <span className="font-label" style={{ fontSize: "0.55rem", color: "#22c55e" }}>AI Match Summary — Live</span>
-            </div>
-            <p className="text-white/70 text-xs font-light leading-relaxed"
-              style={{ opacity: summaryVisible ? 1 : 0, transition: "opacity 0.4s ease" }}>
-              {AI_SUMMARIES[aiSummary]}
+          <h2 className="section-title mb-6">
+            THE PLAYER.<br />
+            <span style={{ color: "#D4AF37" }}>IN MOTION.</span>
+          </h2>
+          <div className="flex items-center gap-4 flex-wrap">
+            <p className="text-white/40 text-sm font-light max-w-xl leading-relaxed">
+              Visual showcase of playing style, movement patterns and attacking intelligence — 
+              drawn from documented statistical output.
             </p>
+            <span className="px-3 py-1 text-xs rounded-full font-semibold"
+              style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", color: "rgba(212,175,55,0.7)" }}>
+              🎨 Creative Showcase — Stylised Concepts
+            </span>
+          </div>
+        </div>
+
+        {/* AI Stat Ticker */}
+        <div className={`mb-10 transition-all duration-1000 delay-100 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+          <div className="glass-card p-4 flex items-center gap-4" style={{ border: "1px solid rgba(212,175,55,0.15)" }}>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs"
+                style={{ background: "rgba(212,175,55,0.2)" }}>📊</div>
+              <span className="font-label text-xs">Verified Output</span>
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <div
+                key={aiSummary}
+                className="text-white/60 text-sm font-light"
+                style={{ animation: "fadeInUp 0.5s ease forwards" }}
+              >
+                {AI_SUMMARIES[aiSummary]}
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap gap-2 mb-10 reveal">
+        <div className={`flex flex-wrap gap-2 mb-10 transition-all duration-1000 delay-200 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           {CATEGORIES.map((cat) => (
-            <button key={cat} onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 text-xs font-bold tracking-widest uppercase rounded-full transition-all duration-300 ${
-                activeCategory === cat
-                  ? "bg-yellow-500 text-black"
-                  : "border border-white/10 text-white/40 hover:border-yellow-400/30 hover:text-white/70"
-              }`}>
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className="px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-200"
+              style={{
+                background: activeCategory === cat ? "rgba(212,175,55,0.15)" : "rgba(255,255,255,0.04)",
+                border: activeCategory === cat ? "1px solid rgba(212,175,55,0.5)" : "1px solid rgba(255,255,255,0.08)",
+                color: activeCategory === cat ? "#D4AF37" : "rgba(255,255,255,0.5)",
+              }}
+            >
               {cat}
             </button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          {/* Main Feature Panel */}
-          <div className="lg:col-span-3 reveal-left">
-            <div className="glass-card overflow-hidden" style={{ border: "1px solid rgba(212,175,55,0.1)" }}>
-              {/* Simulated Video Screen */}
-              <div className="relative aspect-video"
-                style={{ background: "linear-gradient(135deg, #050505 0%, #0a0a0a 100%)" }}>
-                {/* Stadium light simulation */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div style={{
-                    width: "300px", height: "300px", borderRadius: "50%",
-                    background: "radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%)",
+        {/* Main Grid */}
+        <div className="grid lg:grid-cols-5 gap-6">
+
+          {/* Featured Card */}
+          <div className="lg:col-span-3 reveal">
+            <div className="glass-card overflow-hidden" style={{ border: "1px solid rgba(212,175,55,0.15)" }}>
+
+              {/* Video Placeholder */}
+              <div className="relative h-72 lg:h-80 overflow-hidden"
+                style={{ background: "linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 50%, #0d0d0d 100%)" }}>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="text-7xl mb-4">{selected.icon}</div>
+                  <div className="px-3 py-1 text-xs rounded-full font-semibold mb-2"
+                    style={{ background: "rgba(212,175,55,0.1)", border: "1px solid rgba(212,175,55,0.25)", color: "#D4AF37" }}>
+                    {selected.category}
+                  </div>
+                  <div className="font-label text-center" style={{ fontSize: "0.55rem", color: "rgba(212,175,55,0.5)" }}>
+                    {selected.match}
+                  </div>
+                </div>
+                <div className="absolute inset-0 blur-2xl text-6xl opacity-30 flex items-center justify-center">
+                  {selected.icon}
+                </div>
+              </div>
+
+              {/* Play button */}
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-300"
+                  style={{ background: "rgba(212,175,55,0.15)", border: "1.5px solid rgba(212,175,55,0.4)" }}>
+                  <div className="w-0 h-0" style={{
+                    borderTop: "10px solid transparent", borderBottom: "10px solid transparent",
+                    borderLeft: "16px solid #D4AF37", marginLeft: "3px",
                   }} />
                 </div>
-                {/* Pitch lines */}
-                <svg className="absolute inset-0 w-full h-full opacity-5" viewBox="0 0 16 9" preserveAspectRatio="xMidYMid meet">
-                  <rect x="0.5" y="0.5" width="15" height="8" fill="none" stroke="white" strokeWidth="0.05"/>
-                  <line x1="8" y1="0.5" x2="8" y2="8.5" stroke="white" strokeWidth="0.03"/>
-                  <circle cx="8" cy="4.5" r="1.5" fill="none" stroke="white" strokeWidth="0.03"/>
-                  <rect x="0.5" y="2.5" width="2" height="4" fill="none" stroke="white" strokeWidth="0.03"/>
-                  <rect x="13.5" y="2.5" width="2" height="4" fill="none" stroke="white" strokeWidth="0.03"/>
-                </svg>
-                {/* Category Badge */}
-                <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-bold"
-                  style={{ background: "rgba(212,175,55,0.9)", color: "#030303" }}>
-                  {selected.category}
-                </div>
-                {/* Time */}
-                <div className="absolute top-4 right-4 font-mono text-sm font-bold"
-                  style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.8)" }}>
-                  {selected.time}
-                </div>
-                {/* Center icon */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative">
-                    <div className="text-7xl animate-float">{selected.icon}</div>
-                    <div className="absolute inset-0 blur-2xl text-6xl opacity-30 flex items-center justify-center">
-                      {selected.icon}
-                    </div>
-                  </div>
-                </div>
-                {/* Play button */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-300"
-                    style={{ background: "rgba(212,175,55,0.15)", border: "1.5px solid rgba(212,175,55,0.4)" }}>
-                    <div className="w-0 h-0" style={{
-                      borderTop: "10px solid transparent", borderBottom: "10px solid transparent",
-                      borderLeft: "16px solid #D4AF37", marginLeft: "3px",
-                    }} />
-                  </div>
-                </div>
-                {/* Bottom gradient */}
-                <div className="absolute bottom-0 left-0 right-0 h-24"
-                  style={{ background: "linear-gradient(0deg, #030303 0%, transparent 100%)" }} />
               </div>
+
+              {/* Bottom gradient */}
+              <div className="absolute bottom-0 left-0 right-0 h-24"
+                style={{ background: "linear-gradient(0deg, #030303 0%, transparent 100%)" }} />
 
               {/* Info Panel */}
               <div className="p-6">
-                <div className="font-label mb-1" style={{ color: "rgba(212,175,55,0.7)" }}>{selected.match}</div>
+                <div className="font-label mb-1" style={{ color: "rgba(212,175,55,0.7)" }}>Playing Style Profile</div>
                 <h3 className="text-xl font-bold text-white mb-2">{selected.label}</h3>
                 <p className="text-white/50 text-sm font-light leading-relaxed mb-5">{selected.desc}</p>
                 <div className="flex flex-wrap gap-2">
@@ -210,7 +218,7 @@ export default function MatchCinema() {
 
           {/* Highlight Reel List */}
           <div className="lg:col-span-2 space-y-3 reveal-right">
-            <div className="font-label mb-4">Highlight Reel</div>
+            <div className="font-label mb-4">Style Profile Cards</div>
             {filtered.map((h, i) => (
               <div key={h.id} onClick={() => setSelected(h)}
                 className="video-card glass-card p-4 cursor-pointer transition-all duration-300 group"
@@ -240,34 +248,38 @@ export default function MatchCinema() {
               </div>
             ))}
 
-            {/* AI Commentator Card */}
+            {/* Verified Output Card */}
             <div className="glass-card-gold p-5 mt-2" style={{ border: "1px solid rgba(212,175,55,0.2)" }}>
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-7 h-7 rounded-full flex items-center justify-center"
-                  style={{ background: "rgba(212,175,55,0.2)" }}>🤖</div>
+                  style={{ background: "rgba(212,175,55,0.2)" }}>📊</div>
                 <div>
-                  <div className="text-white text-xs font-bold">AI Commentator</div>
-                  <div className="font-label" style={{ fontSize: "0.5rem", color: "rgba(212,175,55,0.6)" }}>Auto-Generated</div>
-                </div>
-                <div className="ml-auto flex gap-0.5">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="w-1 rounded-full"
-                      style={{
-                        height: `${8 + i * 4}px`, background: "#D4AF37",
-                        animation: `waveform 1s ease-in-out infinite ${i * 0.15}s`,
-                      }} />
-                  ))}
+                  <div className="text-white text-xs font-bold">Verified Season Output</div>
+                  <div className="font-label" style={{ fontSize: "0.5rem", color: "rgba(212,175,55,0.6)" }}>
+                    ✅ SpVgg Greuther Fürth 2024-25
+                  </div>
                 </div>
               </div>
               <p className="text-white/60 text-xs font-light leading-relaxed italic">
-                &ldquo;Futkeu accelerates past two defenders with explosive pace — and finishes with
-                the composure of someone who&apos;s been here a thousand times before.
-                That&apos;s the mark of a future world-class player.&rdquo;
+                &ldquo;17 goals and 5 assists across 32 appearances — a goal contribution rate that
+                places Futkeu among the elite young strikers in German football. The numbers
+                are not projection. They are the record.&rdquo;
               </p>
             </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes waveform {
+          0%, 100% { transform: scaleY(1); }
+          50% { transform: scaleY(1.8); }
+        }
+      `}</style>
     </section>
   );
 }

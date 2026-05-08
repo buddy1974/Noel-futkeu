@@ -223,8 +223,27 @@ export default function Story() {
           </div>
         </div>
 
+        {/* Editorial Pull Quote — brand voice, not a verified direct quote */}
+        <div className="mt-20 mb-16 max-w-3xl mx-auto px-4 reveal-slow">
+          <div className="luxury-divider mb-10">
+            <span className="font-label" style={{ color: "rgba(212,175,55,0.3)", fontSize: "0.55rem" }}>The Record</span>
+          </div>
+          <blockquote className="pull-quote text-center" style={{ borderLeft: "none", paddingLeft: 0, borderTop: "1px solid rgba(212,175,55,0.2)", borderBottom: "1px solid rgba(212,175,55,0.2)", padding: "2rem 0" }}>
+            &ldquo;17 goals in 32 appearances. At 21. On loan. That is not a breakthrough season.
+            That is a statement of intent.&rdquo;
+          </blockquote>
+          <div className="text-center mt-4">
+            <span className="font-label" style={{ fontSize: "0.5rem", color: "rgba(255,255,255,0.2)" }}>
+              🎨 Editorial — brand voice · Stats: ✅ Verified, Transfermarkt 2026
+            </span>
+          </div>
+          <div className="luxury-divider mt-10">
+            <span className="font-label" style={{ color: "rgba(212,175,55,0.3)", fontSize: "0.55rem" }}>Season Summary</span>
+          </div>
+        </div>
+
         {/* Bottom stats bar */}
-        <div className="mt-20 reveal">
+        <div className="mt-0 reveal">
           <div className="glass-card-gold p-8"
             style={{ border: "1px solid rgba(212,175,55,0.2)" }}>
             <div className="text-center mb-6">

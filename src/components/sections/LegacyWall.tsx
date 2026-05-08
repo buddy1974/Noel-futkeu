@@ -247,8 +247,15 @@ export default function LegacyWall() {
           </div>
         </div>
 
+        {/* Section divider */}
+        <div className="mt-16 mb-8 luxury-divider reveal-slow">
+          <span className="font-label" style={{ color: "rgba(212,175,55,0.3)", fontSize: "0.55rem", whiteSpace: "nowrap" }}>
+            Player Identity
+          </span>
+        </div>
+
         {/* Identity facts bar */}
-        <div className="mt-12 reveal">
+        <div className="mt-0 reveal">
           <div className="glass-card-gold p-8" style={{ border: "1px solid rgba(212,175,55,0.15)" }}>
             <div className="text-center mb-6">
               <div className="font-label" style={{ color: "rgba(212,175,55,0.8)" }}>Player Identity — Verified</div>
@@ -261,7 +268,7 @@ export default function LegacyWall() {
                 <div key={f.label}>
                   <div className="text-white font-bold text-sm mb-1">{f.value}</div>
                   <div className="text-white/40 text-xs">{f.label}</div>
-                  <div className="font-label mt-1" style={{ fontSize: "0.4rem", color: "rgba(212,175,55,0.5)" }}>{f.badge} Verified</div>
+                  <div className="font-label mt-1" style={{ fontSize: "0.42rem", color: "rgba(212,175,55,0.5)" }}>{f.badge} Verified</div>
                 </div>
               ))}
             </div>

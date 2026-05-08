@@ -98,7 +98,10 @@ export default function Hero() {
 
             {/* THE RISE label */}
             <div style={{opacity:textVisible?1:0,transition:"opacity 0.6s ease 0.3s"}} className="mb-1">
-              <span className="font-label tracking-[0.5em]" style={{color:"rgba(212,175,55,0.5)",fontSize:"0.7rem"}}>THE RISE</span>
+              <div style={{display:"flex",alignItems:"center",gap:"14px"}}>
+                <span className="font-label tracking-[0.5em]" style={{color:"rgba(212,175,55,0.5)",fontSize:"0.7rem"}}>THE RISE</span>
+                <div style={{width:"48px",height:"1px",background:"linear-gradient(90deg,rgba(212,175,55,0.4),transparent)",flexShrink:0}} />
+              </div>
             </div>
 
             {/* Name */}
@@ -115,7 +118,12 @@ export default function Hero() {
                 transition:"all 1.2s cubic-bezier(0.19,1,0.22,1) 0.6s"}}>FUTKEU</h1>
             </div>
 
-            <div className="gold-line mb-6" />
+            <div className="flex items-center gap-4 mb-6"
+              style={{opacity:textVisible?1:0,transition:"opacity 0.6s ease 0.9s"}}>
+              <div style={{width:"60px",height:"1px",background:"linear-gradient(90deg,#D4AF37,transparent)",flexShrink:0}} />
+              <div style={{width:"8px",height:"8px",borderRadius:"50%",background:"rgba(212,175,55,0.4)",flexShrink:0}} />
+              <div style={{flex:1,height:"1px",background:"linear-gradient(90deg,rgba(212,175,55,0.15),transparent)"}} />
+            </div>
 
             {/* Tagline */}
             <p className="text-lg lg:text-xl font-light tracking-[0.15em] text-white/50 uppercase mb-3"
@@ -194,10 +202,13 @@ export default function Hero() {
         <div className="mt-6 pt-6 border-t"
           style={{borderColor:"rgba(212,175,55,0.1)",opacity:statsStarted?1:0,transform:statsStarted?"translateY(0)":"translateY(20px)",transition:"all 0.8s cubic-bezier(0.19,1,0.22,1)"}}>
           <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full" style={{background:"#22c55e",animation:"dotBlink 1.5s ease-in-out infinite"}} />
-              <span className="font-label" style={{fontSize:"0.6rem",color:"rgba(34,197,94,0.7)",letterSpacing:"0.2em"}}>
-                ✅ VERIFIED STATS — Transfermarkt · 2025/26 Season
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className="w-2 h-2 rounded-full" style={{background:"#22c55e",boxShadow:"0 0 6px rgba(34,197,94,0.6)",animation:"dotBlink 1.5s ease-in-out infinite"}} />
+              <span className="font-label" style={{fontSize:"0.6rem",color:"rgba(34,197,94,0.8)",letterSpacing:"0.2em"}}>
+                VERIFIED STATS
+              </span>
+              <span className="font-label" style={{fontSize:"0.5rem",color:"rgba(255,255,255,0.25)",letterSpacing:"0.1em"}}>
+                Transfermarkt · 2025/26
               </span>
             </div>
             <div className="flex flex-wrap gap-3">

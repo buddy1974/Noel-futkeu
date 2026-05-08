@@ -353,7 +353,176 @@ body {
   animation: scanLine 3s linear infinite; z-index: 10;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1B — LUXURY MOTION SYSTEM & MOBILE POLISH
+   MaxPromo Digital © 2026
+═══════════════════════════════════════════════════════════ */
+
+/* ---------- Scroll Progress Bar ---------- */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 2px; z-index: 9999;
+  background: linear-gradient(90deg, #B8960C 0%, #D4AF37 50%, #FFD700 100%);
+  box-shadow: 0 0 8px rgba(212,175,55,0.6);
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
+
+/* ---------- Section Title (MatchCinema & reusable) ---------- */
+.section-title {
+  font-size: clamp(2rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+}
+
+/* ---------- Reveal Animations ---------- */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.9s var(--ease-luxury), transform 0.9s var(--ease-luxury);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+.reveal-left {
+  opacity: 0; transform: translateX(-60px);
+  transition: opacity 0.8s var(--ease-luxury), transform 0.8s var(--ease-luxury);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-right {
+  opacity: 0; transform: translateX(60px);
+  transition: opacity 0.8s var(--ease-luxury), transform 0.8s var(--ease-luxury);
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-scale {
+  opacity: 0; transform: scale(0.9);
+  transition: opacity 0.8s var(--ease-luxury), transform 0.8s var(--ease-luxury);
+}
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+.reveal-slow {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 1.2s var(--ease-luxury), transform 1.2s var(--ease-luxury);
+}
+.reveal-slow.visible { opacity: 1; transform: translateY(0); }
+
+/* ---------- Stagger Helpers ---------- */
+.stagger-1 { transition-delay: 0.05s !important; }
+.stagger-2 { transition-delay: 0.10s !important; }
+.stagger-3 { transition-delay: 0.15s !important; }
+.stagger-4 { transition-delay: 0.20s !important; }
+.stagger-5 { transition-delay: 0.25s !important; }
+
+/* ---------- Editorial Pull Quote ---------- */
+.pull-quote {
+  border-left: 2px solid var(--gold-primary);
+  padding-left: 1.5rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  font-weight: 300;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+}
+
+/* ---------- Luxury Divider ---------- */
+.luxury-divider {
+  display: flex; align-items: center; gap: 1.5rem;
+}
+.luxury-divider::before,
+.luxury-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent);
+}
+
+/* ---------- Cinematic Frame (image wrapper) ---------- */
+.cinematic-frame {
+  position: relative; overflow: hidden; border-radius: 12px;
+  border: 1px solid rgba(212,175,55,0.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+}
+.cinematic-frame::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent);
+}
+
+/* ---------- Luxury Lift Hover ---------- */
+.luxury-lift {
+  transition: transform 0.4s var(--ease-luxury), box-shadow 0.4s var(--ease-luxury);
+}
+.luxury-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 20px rgba(212,175,55,0.1);
+}
+
+/* ---------- Data Integrity Badges ---------- */
+.badge-verified {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 999px;
+  font-size: 0.5rem; font-weight: 700; letter-spacing: 0.12em;
+  background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25);
+  color: rgba(34,197,94,0.9);
+}
+.badge-ai {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 999px;
+  font-size: 0.5rem; font-weight: 700; letter-spacing: 0.12em;
+  background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2);
+  color: rgba(212,175,55,0.8);
+}
+
+/* ---------- Mobile Refinements ---------- */
 @media (max-width: 768px) {
   body { cursor: auto; }
   .cursor-dot, .cursor-ring { display: none; }
+
+  /* Nav: tighten logo on smallest screens */
+  .nav-logo-text { display: none; }
+
+  /* Hero name: ensure it doesn't overflow at 375px */
+  .hero-name { font-size: clamp(3rem, 18vw, 6rem) !important; }
+
+  /* Sections: reduce vertical padding on mobile */
+  section { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+
+  /* PerformanceLab: tighten attribute grid on mobile */
+  .attr-grid { gap: 0.75rem !important; }
+  .attr-cell { padding: 0.75rem !important; }
+
+  /* Pull quote: smaller on mobile */
+  .pull-quote { font-size: 1rem; padding-left: 1rem; }
+
+  /* Glass cards: reduce padding on mobile */
+  .glass-card { padding: 1rem; }
+  .glass-card-gold { padding: 1rem; }
+
+  /* Luxury divider: reduce gap */
+  .luxury-divider { gap: 0.75rem; }
+
+  /* Scroll progress: slightly thicker on mobile for visibility */
+  .scroll-progress { height: 3px; }
+}
+
+@media (max-width: 480px) {
+  /* Extra-small: prevent any horizontal overflow */
+  .section-title { font-size: clamp(1.8rem, 14vw, 3rem); }
+  .counter-number { font-size: clamp(1.8rem, 10vw, 3rem); }
+}
+
+/* ---------- Accessibility: reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-slow {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .scroll-progress { transition: none; }
 }
